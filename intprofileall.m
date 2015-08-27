@@ -38,8 +38,11 @@ for i=length(varargin):-1:1
             ~ strcmp(varargin{i},'integrate') && ~strcmp(varargin{i},'volume') && ...
             length(varargin{i})>5
         folder = varargin{i};
+        if ~exist(folder, 'dir')
+            mkdir(folder)
+        end
         if ~strcmp(folder(end),'\') && ~strcmp(folder(end),'/')
-            folder = [folder '\'];
+            folder = strcat(folder, filesep);
         end
     else
         ind = [i ind];
