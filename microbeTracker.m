@@ -1493,9 +1493,9 @@ function updateorientation(cell)
     if cell<=length(cellList{frame}) && ~isempty(cellList{frame}{cell}) && isfield(cellList{frame}{cell},'mesh') && size(cellList{frame}{cell}.mesh,1)>1
         mesh = cellList{frame}{cell}.mesh;
         for k=1:2
-            set(ax(k),'TickLength',[0 0],'XTickLabel',{},'YTickLabel',{},'nextplot','add');
+            set(ax(k),'TickLength',[0 0],'XTickLabel',{},'YTickLabel',{},'nextplot','add','LineWidth',1);
             if meshDispMode==3
-                plt2 = plot(ax(k),mesh(:,1),mesh(:,2),mesh(:,3),mesh(:,4),mesh(:,[1 3])',mesh(:,[2 4])','color',meshcolor);
+                plt2 = plot(ax(k),mesh(:,1),mesh(:,2),mesh(:,3),mesh(:,4),mesh(:,[1 3])',mesh(:,[2 4])','color',meshcolor,'LineWidth',1);
             elseif meshDispMode==2
                 e = round(size(mesh,1)/2);
                 plt2 = text(round(mean([mesh(e,1);mesh(e,3)])),round(mean([mesh(e,2);mesh(e,4)])),...
@@ -1503,10 +1503,10 @@ function updateorientation(cell)
             elseif meshDispMode==1
                 plt2 = [];
             end
-            plt1 = plot(ax(k),mesh(:,1),mesh(:,2),mesh(:,3),mesh(:,4),'color',meshcolor);
+            plt1 = plot(ax(k),mesh(:,1),mesh(:,2),mesh(:,3),mesh(:,4),'color',meshcolor,'LineWidth',1);
             if ~isfield(cellList{frame}{cell},'polarity'), cellList{frame}{cell}.polarity=0; end
             if cellList{frame}{cell}.polarity
-                plt3 = plot(ax(k),[mesh(1,1) 7*mesh(1,1)-3*mesh(3,1)-3*mesh(3,3)],[mesh(1,2) 7*mesh(1,2)-3*mesh(3,2)-3*mesh(3,4)],'color',meshcolor);
+                plt3 = plot(ax(k),[mesh(1,1) 7*mesh(1,1)-3*mesh(3,1)-3*mesh(3,3)],[mesh(1,2) 7*mesh(1,2)-3*mesh(3,2)-3*mesh(3,4)],'color',meshcolor,'LineWidth',1);
             else
                 plt3 = [];
             end
@@ -1523,7 +1523,7 @@ function updateorientation(cell)
         ctry = cellList{frame}{cell}.contour(:,2);
         for k=1:2
             if meshDispMode==1 || meshDispMode==2 || meshDispMode==3
-                plt = plot(ax(k),ctrx,ctry,'color',meshcolor);
+                plt = plot(ax(k),ctrx,ctry,'color',meshcolor,'LineWidth',1);
             else
                 return
             end
