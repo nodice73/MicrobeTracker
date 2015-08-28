@@ -5,10 +5,13 @@ if length(range)==1, range = [range range]; end
 range=[max(1,range(1)) min(size(rawS1Data,3),size(rawPhaseData,3),range(2))];
 if range(1)>range(2), range(1)=range(2); end
 for i=range(1):range(2)
-    imgP = rawPhaseData(:,:,i);
+    imgP = imadjust(rawPhaseData(:,:,i));
     if channels(g)==3, img = rawS1Data(:,:,i); end
     if channels(g)==4, img = rawS2Data(:,:,i); end
     thres = graythresh(imgP);
+    if thres == 0
+        warning('[subtractbbr] Thresholding failed: Entire image is background.');
+    end
     mask = im2bw(imgP,thres);
     for k=1:p.bgrErodeNum, mask = imerode(mask,se); end
     bgr = mean(img(mask));
