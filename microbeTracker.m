@@ -3530,7 +3530,7 @@ function subtractbgr(channels,range,varargin)
                 break
             end
             if invert, imgP = max(max(imgP))-imgP; end
-            thres = graythreshreg(imgP,p.threshminlevel);
+            thres = graythreshreg(imgP);
             if thres==0
                 warning('[microbeTracker] Thresholding failed: Entire image is background.'); 
             end
