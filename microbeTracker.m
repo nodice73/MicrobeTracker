@@ -3517,7 +3517,12 @@ function subtractbgr(channels,range,varargin)
             else
                 imgP = rawPhaseData(:,:,i);
             end
-            if isempty(imgP), continue; end
+            if isempty(imgP)
+                continue;
+            else
+                % increase contrast to help thresholding function.
+                imgP = imadjust(imgP);
+            end
             if channels(g)==3, img = rawS1Data(:,:,i); end
             if channels(g)==4, img = rawS2Data(:,:,i); end
             if size(img,1)~=size(imgP,1) || size(img,2)~=size(imgP,2)
@@ -3526,6 +3531,9 @@ function subtractbgr(channels,range,varargin)
             end
             if invert, imgP = max(max(imgP))-imgP; end
             thres = graythreshreg(imgP,p.threshminlevel);
+            if thres==0
+                warning('[microbeTracker] Thresholding failed: Entire image is background.'); 
+            end
             mask = im2bw(imgP,thres);
             for k=1:p.bgrErodeNum, mask = imerode(mask,se); end
             bgr = mean(img(mask));
