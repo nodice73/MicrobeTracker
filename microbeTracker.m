@@ -4354,23 +4354,23 @@ for cell = proccells % parfor
             if ismember(p.algorithm,[2 3])
                 pcCell1 = splitted2model(mesh1,p);
                 pcCell1 = model2box(pcCell1,roiBox,p.algorithm);
-                pcCell1 = align(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell1,p,false,roiBox,thres,[frame cell]);
+                [pcCell1, fitquality1] = align(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell1,p,false,roiBox,thres,[frame cell]);
                 pcCell1 = box2model(pcCell1,roiBox,p.algorithm);
                 cCell1 = model2geom(pcCell1,p.algorithm);
                 pcCell2 = splitted2model(mesh2,p);
                 pcCell2 = model2box(pcCell2,roiBox,p.algorithm);
-                pcCell2 = align(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell2,p,false,roiBox,thres,[frame cell]);
+                [pcCell2, fitquality2] = align(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell2,p,false,roiBox,thres,[frame cell]);
                 pcCell2 = box2model(pcCell2,roiBox,p.algorithm);
                 cCell2 = model2geom(pcCell2,p.algorithm);
             else
                 pcCell1 = align4IM(mesh1,p);
                 pcCell1 = model2box(pcCell1,roiBox,p.algorithm);
-                pcCell1 = align4(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell1,p,roiBox,thres,[frame cell]);
+                [pcCell1, fitquality1] = align4(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell1,p,roiBox,thres,[frame cell]);
                 pcCell1 = box2model(pcCell1,roiBox,p.algorithm);
                 cCell1 = pcCell1;
                 pcCell2 = align4IM(mesh2,p);
                 pcCell2 = model2box(pcCell2,roiBox,p.algorithm);
-                pcCell2 = align4(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell2,p,roiBox,thres,[frame cell]);
+                [pcCell2, fitquality2] = align4(roiImg,roiExtDx,roiExtDy,roiAmap,pcCell2,p,roiBox,thres,[frame cell]);
                 pcCell2 = box2model(pcCell2,roiBox,p.algorithm);
                 cCell2 = pcCell2;
             end
@@ -4687,22 +4687,22 @@ while reg<=regmax && reg<=p.maxRegNumber
                if ismember(p.algorithm,[2 3])
                     pcCell1 = splitted2model(mesh1,p);
                     pcCell1 = model2box(pcCell1,roiBox,p.algorithm);
-                    pcCell1 = align(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell1,p,false,roiBox,thres,[frame cell+1]);
+                    [pcCell1, fitquality1] = align(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell1,p,false,roiBox,thres,[frame cell+1]);
                     pcCell1 = box2model(pcCell1,roiBox,p.algorithm);
                     cCell1 = model2geom(pcCell1,p.algorithm);
                     pcCell2 = splitted2model(mesh2,p);
                     pcCell2 = model2box(pcCell2,roiBox,p.algorithm);
-                    pcCell2 = align(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell2,p,false,roiBox,thres,[frame cell+2]);
+                    [pcCell2, fitquality2] = align(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell2,p,false,roiBox,thres,[frame cell+2]);
                     pcCell2 = box2model(pcCell2,roiBox,p.algorithm);
                     cCell2 = model2geom(pcCell2,p.algorithm);
                 else
                     pcCell1 = align4IM(mesh1,p);
                     pcCell1 = model2box(pcCell1,roiBox,p.algorithm);
-                    cCell1 = align4(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell1,p,roiBox,thres,[frame cell+1]);
+                    [cCell1, fitquality1] = align4(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell1,p,roiBox,thres,[frame cell+1]);
                     cCell1 = box2model(cCell1,roiBox,p.algorithm); % Corrected pcCell->cCell 2008/08/02
                     pcCell2 = align4IM(mesh2,p);
                     pcCell2 = model2box(pcCell2,roiBox,p.algorithm);
-                    cCell2 = align4(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell2,p,roiBox,thres,[frame cell+2]);
+                    [cCell2, fitquality2] = align4(roiImg,roiExtDx,roiExtDy,roiExtDx*0,pcCell2,p,roiBox,thres,[frame cell+2]);
                     cCell2 = box2model(cCell2,roiBox,p.algorithm); % Corrected pcCell->cCell 2008/08/02
                 end
 
