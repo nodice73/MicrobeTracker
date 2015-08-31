@@ -34,7 +34,7 @@ horalign = 0.2
 eqaldist = 0.2
 
 % Image force parameters
-fitqualitymax = 0.5
+fitqualitymax = 0.30
 forceWeights = 0.25 0.5 0.25
 dmapThres = 2
 dmapPower = 2
@@ -60,9 +60,9 @@ fitStep = 0.2
 fitStepM = 0.6
 
 % Joining and splitting
-splitThreshold = 0.12
-joindist = 1
-joinangle = 0.1
+splitThreshold = .1
+joindist = 5
+joinangle = 0.8
 joinWhenReuse = 0
 split1 = 1
 
