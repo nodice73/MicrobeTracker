@@ -3,7 +3,7 @@
 algorithm = 4
 
 % Pixel-based parameters
-areaMin = 40
+areaMin = 60
 areaMax = 250
 thresFactorM = 1
 thresFactorF = 1
@@ -20,7 +20,7 @@ threshminlevel = 0.02
 % Constraint parameters
 fmeshstep = 1
 cellwidth = 8
-fsmooth = 18
+fsmooth = 10
 imageforce = 4
 wspringconst = 0.3
 rigidityRange = 2.5
@@ -60,11 +60,11 @@ fitStep = 0.2
 fitStepM = 0.6
 
 % Joining and splitting
-splitThreshold = 0
+splitThreshold = 0.12
 joindist = 1
 joinangle = 0.1
 joinWhenReuse = 0
-split1 = 0
+split1 = 1
 
 % Other
 bgrErodeNum = 5
