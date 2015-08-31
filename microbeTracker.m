@@ -4377,41 +4377,62 @@ for cell = proccells % parfor
             
             mesh1 = model2mesh(cCell1,p.meshStep,p.meshTolerance,p.meshWidth);
             mesh2 = model2mesh(cCell2,p.meshStep,p.meshTolerance,p.meshWidth);
-            cellStruct1.algorithm = p.algorithm;
-            cellStruct2.algorithm = p.algorithm;
-            cellStruct1.birthframe = frame;
-            cellStruct2.birthframe = prevStruct.birthframe;
-            if size(pcCell1,2)==1, model=pcCell1'; else model=pcCell1; end
-            cellStruct1.model = model;
-            if size(pcCell2,2)==1, model=pcCell2'; else model=pcCell2; end
-            cellStruct2.model = model;
-            cellStruct1.polarity = 1;
-            cellStruct2.polarity = 1;
-            cellStruct1.mesh = mesh1;
-            cellStruct2.mesh = mesh2;
-            cellStruct1.stage = 1;
-            cellStruct2.stage = 1;
-            cellStruct1.timelapse = 1;
-            cellStruct2.timelapse = 1;
-            cellStruct1.divisions = []; % frame?
-            cellStruct2.divisions = [prevStruct.divisions frame];
-            cellStruct1.box = roiBox;
-            cellStruct2.box = roiBox;
-            daughter = getdaughter(cell,length(cellStruct2.divisions),cellListN(frame));
-            cellStruct1.ancestors = [prevStruct.ancestors cell];
-            cellStruct2.ancestors = prevStruct.ancestors;
-            cellStruct1.descendants = [];
-            cellStruct2.descendants = [prevStruct.descendants daughter];
-            cellList{frame}{cell} = cellStruct2; % mother cell keeps the number
-            if (frame>1)&&(length(cellList{frame-1})>=cell)&&~isempty(cellList{frame-1}{cell}), cellList{frame-1}{cell}.timelapse=1; end
-            if daughter<p.maxCellNumber
-                cellList{frame}{daughter} = cellStruct1;
-                proccells = [proccells daughter];
-            else
-                gdisp(['cell ' num2str(daughter) ' born still because of overpopulation!'])
+            
+            %added by sean murray - prevent split if resultant cells are
+            %too small  (mother is not reprocessed below, only daughter)
+            if length(mesh1)>1
+                cellarea1 = polyarea([mesh1(:,1);flipud(mesh1(:,3))],[mesh1(:,2);flipud(mesh1(:,4))]);
+            else cellarea1=0;
             end
-            gdisp(['cell ' num2str(cell) ' splitted, cell ' num2str(daughter) ' was born'])
-            continue;
+            if length(mesh2)>1
+                   cellarea2 = polyarea([mesh2(:,1);flipud(mesh2(:,3))],[mesh2(:,2);flipud(mesh2(:,4))]);
+            else cellarea2=0;
+            end
+
+          
+            if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax || p.areaMin>cellarea1 || p.areaMin>cellarea2 || p.areaMax<cellarea1 || p.areaMax<cellarea2)
+                gdisp(['Tried to split cell ' num2str(cell) ' but failed']);
+                if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax) gdisp(['Fit qualities ' num2str(fitquality1) ' ' num2str(fitquality2) ' of daughter cells are too low']);end
+                if( p.areaMin>cellarea1 || p.areaMin>cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too low']);end
+                if( p.areaMax<cellarea1 || p.areaMax<cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too high']);end
+            else
+                % end of addition apart from 'end'
+                cellStruct1.algorithm = p.algorithm;
+                cellStruct2.algorithm = p.algorithm;
+                cellStruct1.birthframe = frame;
+                cellStruct2.birthframe = prevStruct.birthframe;
+                if size(pcCell1,2)==1, model=pcCell1'; else model=pcCell1; end
+                cellStruct1.model = model;
+                if size(pcCell2,2)==1, model=pcCell2'; else model=pcCell2; end
+                cellStruct2.model = model;
+                cellStruct1.polarity = 1;
+                cellStruct2.polarity = 1;
+                cellStruct1.mesh = mesh1;
+                cellStruct2.mesh = mesh2;
+                cellStruct1.stage = 1;
+                cellStruct2.stage = 1;
+                cellStruct1.timelapse = 1;
+                cellStruct2.timelapse = 1;
+                cellStruct1.divisions = []; % frame?
+                cellStruct2.divisions = [prevStruct.divisions frame];
+                cellStruct1.box = roiBox;
+                cellStruct2.box = roiBox;
+                daughter = getdaughter(cell,length(cellStruct2.divisions),cellListN(frame));
+                cellStruct1.ancestors = [prevStruct.ancestors cell];
+                cellStruct2.ancestors = prevStruct.ancestors;
+                cellStruct1.descendants = [];
+                cellStruct2.descendants = [prevStruct.descendants daughter];
+                cellList{frame}{cell} = cellStruct2; % mother cell keeps the number
+                if (frame>1)&&(length(cellList{frame-1})>=cell)&&~isempty(cellList{frame-1}{cell}), cellList{frame-1}{cell}.timelapse=1; end
+                if daughter<p.maxCellNumber
+                    cellList{frame}{daughter} = cellStruct1;
+                    proccells = [proccells daughter];
+                else
+                    gdisp(['cell ' num2str(daughter) ' born still because of overpopulation!'])
+                end
+                gdisp(['cell ' num2str(cell) ' splitted, cell ' num2str(daughter) ' was born'])
+                continue;
+            end
         end
         
         cellStruct.birthframe = prevStruct.birthframe;
@@ -4687,36 +4708,57 @@ while reg<=regmax && reg<=p.maxRegNumber
 
                 mesh1 = model2mesh(cCell1,p.meshStep,p.meshTolerance,p.meshWidth);
                 mesh2 = model2mesh(cCell2,p.meshStep,p.meshTolerance,p.meshWidth);
-                cellStruct1.algorithm = p.algorithm;
-                cellStruct2.algorithm = p.algorithm;
-                cellStruct1.birthframe = frame;
-                cellStruct2.birthframe = frame;
-                if size(pcCell1,2)==1, model=cCell1'; else model=cCell1; end
-                cellStruct1.model = model;
-                if size(pcCell2,2)==1, model=cCell2'; else model=cCell2; end
-                cellStruct2.model = model;
-                cellStruct1.mesh = mesh1;
-                cellStruct2.mesh = mesh2;
-                cellStruct1.polarity = 1;
-                cellStruct2.polarity = 1;
-                cellStruct1.stage = 1;
-                cellStruct2.stage = 1;
-                cellStruct1.timelapse = tl;
-                cellStruct2.timelapse = tl;
-                cellStruct1.divisions = [];
-                cellStruct2.divisions = [];
-                cellStruct1.box = roiBox;
-                cellStruct2.box = roiBox;
-                cellStruct1.ancestors = [];
-                cellStruct2.ancestors = [];
-                cellStruct1.descendants = [];
-                cellStruct2.descendants = [];
-                cell = cell+2;
-                cellList{frame}{cell-1} = cellStruct1;
-                cellList{frame}{cell} = cellStruct2;
-                gdisp(['fitting region ' num2str(reg) ' - passed and saved as cells ' num2str(cell-1) ' and ' num2str(cell)])
-                reg=reg+1;
-                continue;
+                
+                %added by sean murray - prevent split if resultant cells are
+                %too small  (mother is not reprocessed below, only daughter)
+                if length(mesh1)>1
+                    cellarea1 = polyarea([mesh1(:,1);flipud(mesh1(:,3))],[mesh1(:,2);flipud(mesh1(:,4))]);
+                else cellarea1=0;
+                end
+                if length(mesh2)>1
+                    cellarea2 = polyarea([mesh2(:,1);flipud(mesh2(:,3))],[mesh2(:,2);flipud(mesh2(:,4))]);
+                else cellarea2=0;
+                end
+                
+                
+                if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax || p.areaMin>cellarea1 || p.areaMin>cellarea2 || p.areaMax<cellarea1 || p.areaMax<cellarea2)
+                    gdisp(['Tried to split cell ' num2str(cell) ' but failed']);
+                    if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax) gdisp(['Fit qualities ' num2str(fitquality1) ' ' num2str(fitquality2) ' of daughter cells are too low']);end
+                    if( p.areaMin>cellarea1 || p.areaMin>cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too low']);end
+                    if( p.areaMax<cellarea1 || p.areaMax<cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too high']);end
+                else
+                    % end of addition apart from 'end'
+                    cellStruct1.algorithm = p.algorithm;
+                    cellStruct2.algorithm = p.algorithm;
+                    cellStruct1.birthframe = frame;
+                    cellStruct2.birthframe = frame;
+                    if size(pcCell1,2)==1, model=cCell1'; else model=cCell1; end
+                    cellStruct1.model = model;
+                    if size(pcCell2,2)==1, model=cCell2'; else model=cCell2; end
+                    cellStruct2.model = model;
+                    cellStruct1.mesh = mesh1;
+                    cellStruct2.mesh = mesh2;
+                    cellStruct1.polarity = 1;
+                    cellStruct2.polarity = 1;
+                    cellStruct1.stage = 1;
+                    cellStruct2.stage = 1;
+                    cellStruct1.timelapse = tl;
+                    cellStruct2.timelapse = tl;
+                    cellStruct1.divisions = [];
+                    cellStruct2.divisions = [];
+                    cellStruct1.box = roiBox;
+                    cellStruct2.box = roiBox;
+                    cellStruct1.ancestors = [];
+                    cellStruct2.ancestors = [];
+                    cellStruct1.descendants = [];
+                    cellStruct2.descendants = [];
+                    cell = cell+2;
+                    cellList{frame}{cell-1} = cellStruct1;
+                    cellList{frame}{cell} = cellStruct2;
+                    gdisp(['fitting region ' num2str(reg) ' - passed and saved as cells ' num2str(cell-1) ' and ' num2str(cell)])
+                    reg=reg+1;
+                    continue;
+                end
             end
             
             % if the cell passed the quality test and it is not on the
