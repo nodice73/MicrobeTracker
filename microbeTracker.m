@@ -4392,9 +4392,15 @@ for cell = proccells % parfor
           
             if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax || p.areaMin>cellarea1 || p.areaMin>cellarea2 || p.areaMax<cellarea1 || p.areaMax<cellarea2)
                 gdisp(['Tried to split cell ' num2str(cell) ' but failed']);
-                if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax) gdisp(['Fit qualities ' num2str(fitquality1) ' ' num2str(fitquality2) ' of daughter cells are too low']);end
-                if( p.areaMin>cellarea1 || p.areaMin>cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too low']);end
-                if( p.areaMax<cellarea1 || p.areaMax<cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too high']);end
+                if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax)
+                    gdisp(['Fit qualities ' num2str(fitquality1) ' ' num2str(fitquality2) ' of daughter cells are too low']);
+                end
+                if( p.areaMin>cellarea1 || p.areaMin>cellarea2)
+                    gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too low']);
+                end
+                if( p.areaMax<cellarea1 || p.areaMax<cellarea2)
+                    gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too high']);
+                end
             else
                 % end of addition apart from 'end'
                 cellStruct1.algorithm = p.algorithm;
@@ -4723,9 +4729,15 @@ while reg<=regmax && reg<=p.maxRegNumber
                 
                 if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax || p.areaMin>cellarea1 || p.areaMin>cellarea2 || p.areaMax<cellarea1 || p.areaMax<cellarea2)
                     gdisp(['Tried to split cell ' num2str(cell) ' but failed']);
-                    if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax) gdisp(['Fit qualities ' num2str(fitquality1) ' ' num2str(fitquality2) ' of daughter cells are too low']);end
-                    if( p.areaMin>cellarea1 || p.areaMin>cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too low']);end
-                    if( p.areaMax<cellarea1 || p.areaMax<cellarea2) gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too high']);end
+                    if(fitquality1>p.fitqualitymax || fitquality2>p.fitqualitymax)
+                        gdisp(['Fit qualities ' num2str(fitquality1) ' ' num2str(fitquality2) ' of daughter cells are too low']);
+                    end
+                    if( p.areaMin>cellarea1 || p.areaMin>cellarea2)
+                        gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too low']);
+                    end
+                    if( p.areaMax<cellarea1 || p.areaMax<cellarea2)
+                        gdisp(['Areas ' num2str(cellarea1) ' ' num2str(cellarea2) ' of daughter cells are too high']);
+                    end
                 else
                     % end of addition apart from 'end'
                     cellStruct1.algorithm = p.algorithm;
